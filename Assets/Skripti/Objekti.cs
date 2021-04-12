@@ -27,13 +27,5 @@ public class Objekti : MonoBehaviour
         atkrKoord = atroMasina.GetComponent<RectTransform>().localPosition;
         bussKoord = autobus.GetComponent<RectTransform>().localPosition;
     }
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
+ 
 }

@@ -5,51 +5,62 @@ using UnityEngine.EventSystems;
 
 public class DragDropSkripts : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler 
 {
-   
     public Objekti objektuSkripts;
-    private CanvasGroup kanvasGroup;
-    private RectTransform velkObjectTransf;
+    //Velkamam objektam piestiprinātā komponente
+    private CanvasGroup kanvasGrupa;
+    //Vilktā objekta atrašanās vietas koordinātu maiņai
+    private RectTransform velkObjektTransf;
 
     void Awake()
     {
-        kanvasGroup = GetComponent<CanvasGroup>();
-        velkObjectTransf = GetComponent<RectTransform>();
+        //Piekļūst objektam piesaistītajai CanvasGroup komponentei
+        kanvasGrupa = GetComponent<CanvasGroup>();
+        //Piekļūst objekta RectTransform komponentei
+        velkObjektTransf = GetComponent<RectTransform>();
     }
 
-    public void OnPointerDown(PointerEventData notikums) 
+    public void OnPointerDown(PointerEventData notikums)
     {
-        Debug.Log("klikskis");
+        Debug.Log("Uzklikšķināts uz velkamā objekta!");
     }
 
     public void OnBeginDrag(PointerEventData notikums)
     {
-        Debug.Log("Iesākts vilkt objektu");
+        Debug.Log("Uzsākta vilkšana");
+        //Attīra pēdejo vilkto objektu
         objektuSkripts.pedejaisVilktais = null;
-        kanvasGroup.alpha = 0.6f;
-        kanvasGroup.blocksRaycasts = false;
+        kanvasGrupa.alpha = 0.6f;
+        //Lai objektam varētu iet cauri RayCast stars
+        kanvasGrupa.blocksRaycasts = false;
     }
 
     public void OnDrag(PointerEventData notikums)
     {
         Debug.Log("Notiek vilkšana!");
-       velkObjectTransf.anchoredPosition += notikums.delta / objektuSkripts.kanva.scaleFactor;
+        velkObjektTransf.anchoredPosition += notikums.delta / objektuSkripts.kanva.scaleFactor;
     }
 
     public void OnEndDrag(PointerEventData notikums)
     {
-        Debug.Log("Pēdejais vilktais objekts: "+objektuSkripts.pedejaisVilktais);
-        Debug.Log("Beigta vilkšana");
+        //Atlaižot objektu iestata to kā pēdējo vilkto
         objektuSkripts.pedejaisVilktais = notikums.pointerDrag;
-        kanvasGroup.alpha = 1f;
+        Debug.Log("Pēdējais vilktais objekts: " + objektuSkripts.pedejaisVilktais);
+        Debug.Log("Beigta vilkšana!");
+        //Atlaižot objektu tas atkal paliek necaurspīdīgs
+        kanvasGrupa.alpha = 1f;
 
-        if(objektuSkripts.vaiIstajaVieta == false)
+        //Pārbauda vai objekts ir vienkārši nomests vai arī nomests pareizajā vietā
+        if (objektuSkripts.vaiIstajaVieta == false)
         {
-            kanvasGroup.blocksRaycasts = true;
+            //Ja nav nomests pareizajā vietā, tad atkal padara velkamu
+            kanvasGrupa.blocksRaycasts = true;
         }
         else
         {
+            //Ja objekts nolikts pareizajā vietā, izmērā, rotācijā, tad pēdējo vilkto attīra
             objektuSkripts.pedejaisVilktais = null;
         }
+        //Ja viens objekts nomests pareizajā vietā, tad lai varētu turpināt pārvietot pārējos objektus
         objektuSkripts.vaiIstajaVieta = false;
     }
 
