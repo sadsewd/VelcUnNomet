@@ -16,6 +16,7 @@ public class Objekti : MonoBehaviour
     public Canvas kanva;
     public AudioSource skanasAvots;
     public AudioClip[] skanaKoAtskanot;
+    [HideInInspector]
     public GameObject pedejaisVilktais = null;
     [HideInInspector]
     public bool vaiIstajaVieta = false;
